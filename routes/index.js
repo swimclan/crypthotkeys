@@ -14,4 +14,10 @@ router.get('/orders', controllers.getOrders);
 /* GET Order */
 router.get('/order/:id', controllers.getOrder);
 
+/* DELETE Orders */
+router.delete('/orders', controllers.cancelOrders);
+
+/* GET Cancel Order */
+router.get('/cancel/:id', controllers.cancelOrder);
+
 module.exports = router;

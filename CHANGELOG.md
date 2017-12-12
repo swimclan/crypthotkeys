@@ -1,7 +1,10 @@
 ## Crypto Hot Keys Application Changelog
 
+### v0.4.0
+* *Feature* `cancelOrder` and `cancelOrders` endpoints
+
 ### v0.3.0
-* *Feature* `getOerder` and `getOrders` endpoints
+* *Feature* `getOrder` and `getOrders` endpoints
 
 ### v0.2.0
 * *Feature* `getAccount` endpoint
