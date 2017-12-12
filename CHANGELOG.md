@@ -1,5 +1,8 @@
 ## Crypto Hot Keys Application Changelog
 
+### v0.3.0
+* *Feature* `getOerder` and `getOrders` endpoints
+
 ### v0.2.0
 * *Feature* `getAccount` endpoint
 
