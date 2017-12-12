@@ -58,3 +58,12 @@ module.exports.cancelOrder = (req, res, next) => {
     return res.status(200).json(data);
   });
 }
+
+module.exports.websocket = (req, res, next) => {
+  let websocket = exchange.websocket(['ETH-BTC']);
+  websocket.on('message', (data) => { console.log('message', data) });
+  websocket.on('open', (data) => { console.log('open', data) });
+  websocket.on('close', (data) => { console.log('close', data) });
+  websocket.on('error', (err) => { console.log('error', err) });
+  res.status(200).json({result: 'Websocket connected'});
+}
