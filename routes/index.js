@@ -1,9 +1,8 @@
 var express = require('express');
 var router = express.Router();
+var controllers = require('../controllers');
 
 /* GET Account Profile. */
-router.get('/', function(req, res, next) {
-  res.json({name: 'Matt Herron'});
-});
+router.get('/accounts', controllers.getAccounts);
 
 module.exports = router;
