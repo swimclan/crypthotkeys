@@ -20,4 +20,7 @@ router.delete('/orders', controllers.cancelOrders);
 /* GET Cancel Order */
 router.get('/cancel/:id', controllers.cancelOrder);
 
+/* GET Start Websocket */
+router.get('/websocket', controllers.websocket);
+
 module.exports = router;
