@@ -20,6 +20,9 @@ router.delete('/orders', controllers.cancelOrders);
 /* GET Cancel Order */
 router.get('/cancel/:id', controllers.cancelOrder);
 
+/* GET Ticker */
+router.get('/ticker', controllers.productTicker);
+
 /* GET Start Websocket */
 router.get('/websocket', controllers.websocket);
 

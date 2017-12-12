@@ -1,7 +1,7 @@
 var gdax = require('../lib/gdax');
 var get = require('lodash').get;
 
-const exchange = gdax.getInstance();
+const exchange = gdax.getInstance('ETH-BTC');
 
 module.exports.getAccounts = (req, res, next) => {
   exchange.authedClient.getAccounts((err, resp, data) => {
@@ -59,8 +59,17 @@ module.exports.cancelOrder = (req, res, next) => {
   });
 }
 
+module.exports.productTicker = (req, res, next) => {
+  exchange.publicClient.getProductTicker((err, resp, data) => {
+    if (err) {
+      return res.status(500).json({error: err});
+    }
+    return res.status(200).json(data);
+  });
+}
+
 module.exports.websocket = (req, res, next) => {
-  let websocket = exchange.websocket(['ETH-BTC']);
+  const websocket = exchange.websocket;
   websocket.on('message', (data) => { console.log('message', data) });
   websocket.on('open', (data) => { console.log('open', data) });
   websocket.on('close', (data) => { console.log('close', data) });
