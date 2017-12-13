@@ -1,7 +1,7 @@
 var gdax = require('../lib/gdax');
 var config = require('../config');
 
-const exchange = gdax.getInstance(config.get('trading.currency'));
+const exchange = gdax.getInstance(config.get('trading.product'));
 
 module.exports.trade = (side, price, size) => {
   return new Promise((resolve, reject) => {
@@ -12,7 +12,7 @@ module.exports.trade = (side, price, size) => {
     }
     switch (side) {
       case 'buy':
-        exchange.buy(params, (err, resp, data) => {
+        exchange.authedClient.buy(params, (err, resp, data) => {
           if (err) {
             return reject(err);
           }
@@ -20,7 +20,7 @@ module.exports.trade = (side, price, size) => {
         });
         break;
       case 'sell':
-        exchange.sell(params, (err, resp, data) => {
+        exchange.authedClient.sell(params, (err, resp, data) => {
           if (err) {
             return reject(err);
           }

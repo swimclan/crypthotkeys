@@ -1,5 +1,9 @@
 ## Crypto Hot Keys Application Changelog
 
+### v0.9.0
+* *Feature* Added initial flash trading service and route
+* *Feature* Added tools for parsing accounts and calculating trade sizes
+
 ### v0.8.0
 * *Feature* Moved to services for all data fetching from api
 * *Feature* Trading service to execute buying and selling on exchange

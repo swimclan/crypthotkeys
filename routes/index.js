@@ -26,4 +26,7 @@ router.get('/ticker', controllers.productTicker);
 /* GET Start Websocket */
 router.get('/websocket', controllers.websocket);
 
+/* GET Flash trade */
+router.get('/flash/:side', controllers.flashTrade);
+
 module.exports = router;
