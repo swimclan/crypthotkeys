@@ -1,7 +1,8 @@
 var gdax = require('../lib/gdax');
 var get = require('lodash').get;
+var config = require('../config');
 
-const exchange = gdax.getInstance('ETH-BTC');
+const exchange = gdax.getInstance(config.get('trading.currency'));
 
 module.exports.getAccounts = (req, res, next) => {
   exchange.authedClient.getAccounts((err, resp, data) => {
