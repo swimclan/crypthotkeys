@@ -1,5 +1,9 @@
 ## Crypto Hot Keys Application Changelog
 
+### v0.8.0
+* *Feature* Moved to services for all data fetching from api
+* *Feature* Trading service to execute buying and selling on exchange
+
 ### v0.7.0
 * *Feature* Config service for storing preferences
 
