@@ -1,5 +1,8 @@
 ## Crypto Hot Keys Application Changelog
 
+### v0.7.0
+* *Feature* Config service for storing preferences
+
 ### v0.6.0
 * *Feature* `productTicker` endpoint
 * *Fix* Fixed the gdax websocket and public client instantiation to use currency pair in constructor
