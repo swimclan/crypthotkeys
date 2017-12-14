@@ -1,5 +1,8 @@
 ## Crypto Hot Keys Application Changelog
 
+### v0.10.0
+* *Feature* Rounding function for calculating buy/size size;
+
 ### v0.9.0
 * *Feature* Added initial flash trading service and route
 * *Feature* Added tools for parsing accounts and calculating trade sizes

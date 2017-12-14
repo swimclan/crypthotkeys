@@ -78,6 +78,7 @@ module.exports.flashTrade = (req, res, next) => {
       config.get('trading.product'),
       accounts,
       config.get('trading.increment'),
+      config.get('trading.fee'),
       config.get('trading.sigDig'),
       lastTick
     );

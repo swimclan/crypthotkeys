@@ -2,10 +2,11 @@ var get = require('lodash').get;
 
 let config = {
   trading: {
-    product: 'ETH-BTC',
+    product: 'LTC-BTC',
     increment: 0.00001,
     sigDig: 5,
-    fraction: 1
+    fraction: 1,
+    fee: 0.003
   },
   api: {
     production: {
