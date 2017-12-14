@@ -1,5 +1,4 @@
-module.exports.calcTrade = (side, fraction, product, accounts, increment, sigDig, tick) => {
-  //console.log({side, fraction, product, accounts, increment, sigDig, tick});
+module.exports.calcTrade = (side, fraction, product, accounts, increment, fee, sigDig, tick) => {
   let bid = Number(tick.bid);
   let ask = Number(tick.ask);
   let last = Number(tick.price);
@@ -9,12 +8,11 @@ module.exports.calcTrade = (side, fraction, product, accounts, increment, sigDig
     case 'buy':
       available = acctsides.sell.available;
       price = (ask - increment).toFixed(sigDig).toString();
-      size = ((available * fraction / price)).toString();
-      console.log(size);
+      size = this.roundDownTo((available * fraction / price / (1 + fee)), sigDig).toString();
       break;
     case 'sell':
       available = acctsides.buy.available;
-      size = (available * fraction).toString();
+      size = this.roundDownTo(available * fraction, sigDig).toString();
       price = (bid + increment).toFixed(sigDig).toString();
       break;
   }
@@ -36,4 +34,9 @@ module.exports.parseAccounts = (product, accounts) => {
     }
   });
   return ret;
+}
+
+module.exports.roundDownTo = (number, digits) => {
+  let factor = Math.pow(10, digits);
+  return Math.floor(number * factor) / factor;
 }
