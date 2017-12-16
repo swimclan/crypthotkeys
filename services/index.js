@@ -109,6 +109,17 @@ module.exports.getAccounts = () => {
   });
 }
 
+module.exports.getProducts = () => {
+  return new Promise((resolve, reject) => {
+    exchange.publicClient.getProducts((err, resp, data) => {
+      if (err) {
+        return reject(err);
+      }
+      return resolve(data);
+    });
+  });
+}
+
 module.exports.websocket = () => {
   const websocket = exchange.websocket;
   websocket.on('message', (data) => { console.log('message', data) });

@@ -3,6 +3,14 @@ var config = require('../config');
 var services = require('../services');
 var tools = require('../tools');
 
+module.exports.getProducts = (req, res, next) => {
+  services.getProducts().then((data) => {
+    res.status(200).json(data);
+  }).catch((err) => {
+    res.status(500).json({error: err});
+  });
+}
+
 module.exports.getAccounts = (req, res, next) => {
   services.getAccounts().then((data) => {
     res.status(200).json(data);
