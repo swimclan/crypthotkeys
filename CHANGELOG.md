@@ -1,5 +1,9 @@
 ## Crypto Hot Keys Application Changelog
 
+### v0.11.0
+* *Feature* Introduced CORS middleware for cross domain and cross port requests
+* *Feature* `getProducts` endpoint
+
 ### v0.10.0
 * *Feature* Rounding function for calculating buy/size size;
 

@@ -2,8 +2,8 @@ var get = require('lodash').get;
 
 let config = {
   trading: {
-    product: 'LTC-BTC',
-    increment: 0.00001,
+    product: 'ETH-USD',
+    increment: 0.01,
     sigDig: 5,
     fraction: 1,
     fee: 0.003
