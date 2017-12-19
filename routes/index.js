@@ -30,6 +30,6 @@ router.get('/ticker', controllers.productTicker);
 router.get('/websocket', controllers.websocket);
 
 /* GET Flash trade */
-router.get('/flash/:side', controllers.flashTrade);
+router.post('/flash/:side', controllers.flashTrade);
 
 module.exports = router;
