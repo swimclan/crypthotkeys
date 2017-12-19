@@ -82,10 +82,10 @@ module.exports.flashTrade = (req, res, next) => {
   .then(([lastTick, accounts]) => {
     let params = tools.calcTrade(
       side,
-      config.get('trading.fraction'),
-      config.get('trading.product'),
+      req.body.fraction || config.get('trading.fraction'),
+      req.body.product || config.get('trading.product'),
       accounts,
-      config.get('trading.increment'),
+      req.body.increment || config.get('trading.increment'),
       config.get('trading.fee'),
       config.get('trading.sigDig'),
       lastTick

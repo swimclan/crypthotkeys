@@ -1,5 +1,8 @@
 ## Crypto Hot Keys Application Changelog
 
+### v0.12.0
+* *Feature* Trade params can be sent as payload in the request and fallback to config defaults
+
 ### v0.11.0
 * *Feature* Introduced CORS middleware for cross domain and cross port requests
 * *Feature* `getProducts` endpoint
