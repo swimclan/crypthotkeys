@@ -1,5 +1,9 @@
 ## Crypto Hot Keys Application Changelog
 
+### v0.13.0
+* *Feature* Global gdax exchange object with setter in `app.locals`
+* *Feature* Websocket test endpoint takes param for message event to test
+
 ### v0.12.0
 * *Feature* Trade params can be sent as payload in the request and fallback to config defaults
 

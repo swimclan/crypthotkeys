@@ -1,9 +1,7 @@
 var gdax = require('../lib/gdax');
 var config = require('../config');
 
-const exchange = gdax.getInstance(config.get('trading.product'));
-
-module.exports.trade = (side, price, size) => {
+module.exports.trade = (exchange, side, price, size) => {
   return new Promise((resolve, reject) => {
     let params = {
       price: price,
@@ -31,7 +29,7 @@ module.exports.trade = (side, price, size) => {
   });
 }
 
-module.exports.productTicker = () => {
+module.exports.productTicker = (exchange) => {
   return new Promise((resolve, reject) => {
     exchange.publicClient.getProductTicker((err, resp, data) => {
       if (err) {
@@ -42,7 +40,7 @@ module.exports.productTicker = () => {
   });
 }
 
-module.exports.cancelOrder = (orderid) => {
+module.exports.cancelOrder = (exchange, orderid) => {
   return new Promise((resolve, reject) => {
     exchange.authedClient.cancelOrder(orderid, (err, resp, data) => {
       if (err) {
@@ -53,7 +51,7 @@ module.exports.cancelOrder = (orderid) => {
   });
 }
 
-module.exports.cancelOrders = (product) => {
+module.exports.cancelOrders = (exchange, product) => {
   return new Promise((resolve, reject) => {
     let options = product ? {product_id: product} : {};
     exchange.authedClient.cancelAllOrders(options, (err, resp, data) => {
@@ -65,7 +63,7 @@ module.exports.cancelOrders = (product) => {
   });
 }
 
-module.exports.getOrder = (id) => {
+module.exports.getOrder = (exchange, id) => {
   return new Promise((resolve, reject) => {
     exchange.authedClient.getOrder(id, (err, resp, data) => {
       if (err) {
@@ -76,7 +74,7 @@ module.exports.getOrder = (id) => {
   });
 }
 
-module.exports.getOrders = () => {
+module.exports.getOrders = (exchange) => {
   return new Promise((resolve, reject) => {
     exchange.authedClient.getOrders((err, resp, data) => {
       if (err) {
@@ -87,7 +85,7 @@ module.exports.getOrders = () => {
   });
 }
 
-module.exports.getAccount = (id) => {
+module.exports.getAccount = (exchange, id) => {
   return new Promise((resolve, reject) => {
     exchange.authedClient.getAccount(id, (err, resp, data) => {
       if (err) {
@@ -98,7 +96,7 @@ module.exports.getAccount = (id) => {
   });
 }
 
-module.exports.getAccounts = () => {
+module.exports.getAccounts = (exchange) => {
   return new Promise((resolve, reject) => {
     exchange.authedClient.getAccounts((err, resp, data) => {
       if (err) {
@@ -109,7 +107,7 @@ module.exports.getAccounts = () => {
   });
 }
 
-module.exports.getProducts = () => {
+module.exports.getProducts = (exchange) => {
   return new Promise((resolve, reject) => {
     exchange.publicClient.getProducts((err, resp, data) => {
       if (err) {
@@ -120,11 +118,10 @@ module.exports.getProducts = () => {
   });
 }
 
-module.exports.websocket = () => {
+module.exports.websocket = (exchange, event) => {
   const websocket = exchange.websocket;
-  websocket.on('message', (data) => { console.log('message', data) });
-  websocket.on('open', (data) => { console.log('open', data) });
-  websocket.on('close', (data) => { console.log('close', data) });
-  websocket.on('error', (err) => { console.log('error', err) });
+  websocket.on(event, (data) => {
+    (data.type === 'open') && data.reason !== 'canceled' && data.price ? console.log(data.price) : null
+  });
   return Promise.resolve({result: 'Websocket connected'});
 }
