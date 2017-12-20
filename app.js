@@ -4,8 +4,10 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var cors = require('cors')
+var cors = require('cors');
 require('dotenv').config();
+var gdax = require('./lib/gdax');
+var config = require('./config');
 
 var index = require('./routes/index');
 
@@ -18,6 +20,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
+
+app.locals.setExchange = function(product) {
+  this.exchange = gdax.getInstance(product || config.get('trading.product'));
+  return this.exchange
+}
+app.locals.setExchange();
 
 app.use('/v1', index);
 

@@ -27,7 +27,7 @@ router.get('/cancel/:id', controllers.cancelOrder);
 router.get('/ticker', controllers.productTicker);
 
 /* GET Start Websocket */
-router.get('/websocket', controllers.websocket);
+router.get('/websocket/:event', controllers.websocket);
 
 /* GET Flash trade */
 router.post('/flash/:side', controllers.flashTrade);
