@@ -20,6 +20,9 @@ router.get('/order/:id', controllers.getOrder);
 /* DELETE Orders */
 router.delete('/orders', controllers.cancelOrders);
 
+/* GET Fills */
+router.get('/fills', controllers.getFills);
+
 /* GET Cancel Order */
 router.get('/cancel/:id', controllers.cancelOrder);
 
@@ -27,9 +30,15 @@ router.get('/cancel/:id', controllers.cancelOrder);
 router.get('/ticker', controllers.productTicker);
 
 /* GET Start Websocket */
-router.get('/websocket/:event', controllers.websocket);
+router.get('/websocket/open/:event', controllers.websocketOpen);
 
-/* GET Flash trade */
+/* GET Start Websocket */
+router.get('/websocket/close/', controllers.websocketClose);
+
+/* POST Flash trade */
 router.post('/flash/:side', controllers.flashTrade);
+
+/* POST Set stop */
+router.post('/stop', controllers.setStop);
 
 module.exports = router;

@@ -43,10 +43,24 @@ module.exports.getOrder = (req, res, next) => {
   });
 }
 
+module.exports.getFills = (req, res, next) => {
+  services.getFills(req.app.locals.exchange).then((data) => {
+    res.status(200).json(data);
+  }).catch((err) => {
+    res.status(500).json({error: err});
+  });
+}
+
 module.exports.cancelOrders = (req, res, next) => {
   let product = get(req.body, 'product_id', null);
-  services.cancelOrders(req.app.locals.exchange, product).then((data) => {
-    res.status(200).json(data);
+  let exchange = req.app.locals.exchange;
+  let order;
+  services.cancelOrders(exchange, product).then((data) => {
+    order = data;
+    return services.websocket.close(exchange);
+  }).then((socket) => {
+    console.log('CANCEL ORDER: WEBSOCKET CLOSED');
+    res.status(200).json(order);
   }).catch((err) => {
     res.status(500).json({error: err});
   });
@@ -68,10 +82,18 @@ module.exports.productTicker = (req, res, next) => {
   });
 }
 
-module.exports.websocket = (req, res, next) => {
-  let event = req.params.event;
-  services.websocket(req.app.locals.exchange, event).then((result) => {
-    res.status(200).json(result);
+module.exports.websocketOpen = (req, res, next) => {
+  let event = req.params.event || 'message';
+  services.websocket.open(req.app.locals.exchange, event).then((socket) => {
+    res.status(200).json({message: 'socket opened'});
+  }).catch((err) => {
+    res.status(500).json({error: err});
+  });
+}
+
+module.exports.websocketClose = (req, res, next) => {
+  services.websocket.close(req.app.locals.exchange).then((socket) => {
+    res.status(200).json({message: 'socket closed'});
   }).catch((err) => {
     res.status(500).json({error: err});
   });
@@ -101,3 +123,42 @@ module.exports.flashTrade = (req, res, next) => {
     res.status(500).json({error: err});
   });
 }
+
+module.exports.setStop = (req, res, next) => {
+  let fraction = req.body.fraction ? Number(req.body.fraction) : config.get('trading.fraction');
+  let margin = req.body.margin ? Number(req.body.margin) : config.get('trading.stop.margin');
+  let exchange = req.app.locals.exchange;
+  Promise.all([services.getAccounts(exchange), services.websocket.open(exchange, 'message'), services.getFills(exchange)])
+  .then(([accounts, websocket, fills]) => {
+    let cost = tools.calcCost(accounts, fills, exchange.product);
+    let stopLoss = cost.price / (1 + margin);
+    let stopped = false;
+    websocket.on('message', (tick) => {
+      if (tools.checkStop(tick, cost.price, margin) && !stopped) {
+        // Set stopped to true so no further action is taken after first time
+        stopped = true;
+        // Cancel orders
+        services.cancelOrders(exchange, exchange.product).then((data) => {
+          console.log('SELL STOP LOSS: CANCEL ORDERS');
+          console.log(data);
+          // Sell at the best bid price
+          return services.trade(exchange, 'sell', tick.best_bid, cost.size);
+        }).then((data) => {
+          console.log('SELL STOP LOSS: TRADE');
+          console.log(data);
+          // Close websocket
+          return services.websocket.close(exchange);
+        }).then((socket) => {
+          console.log('SELL STOP LOSS: CLOSE WEBSOCKET');
+        }).catch((err) => {
+          console.log(err);
+        });
+      }
+    });
+    res.status(200).json({message: `Stop loss successfully set at ${stopLoss}`});
+  }).catch((err) => {
+    res.status(500).json({error: err});
+  });
+}
+
+
