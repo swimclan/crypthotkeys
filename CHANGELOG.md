@@ -1,5 +1,9 @@
 ## Crypto Hot Keys Application Changelog
 
+### v0.14.0
+* *Feature* Stop loss control
+* *Feature* `fills` endpoint
+
 ### v0.13.0
 * *Feature* Global gdax exchange object with setter in `app.locals`
 * *Feature* Websocket test endpoint takes param for message event to test

@@ -85,6 +85,17 @@ module.exports.getOrders = (exchange) => {
   });
 }
 
+module.exports.getFills = (exchange) => {
+  return new Promise((resolve, reject) => {
+    exchange.authedClient.getFills({product_id: exchange.product}, (err, resp, data) => {
+      if (err) {
+        return reject(err);
+      }
+      return resolve(data);
+    });
+  });
+}
+
 module.exports.getAccount = (exchange, id) => {
   return new Promise((resolve, reject) => {
     exchange.authedClient.getAccount(id, (err, resp, data) => {
@@ -118,10 +129,37 @@ module.exports.getProducts = (exchange) => {
   });
 }
 
-module.exports.websocket = (exchange, event) => {
-  const websocket = exchange.websocket;
-  websocket.on(event, (data) => {
-    (data.type === 'open') && data.reason !== 'canceled' && data.price ? console.log(data.price) : null
-  });
-  return Promise.resolve({result: 'Websocket connected'});
+module.exports.websocket = {
+  // Socket open
+  open: (exchange, event) => {
+    let result;
+    const websocket = exchange.websocket;
+    // If the socket is closed, reconnect
+    if (!websocket.socket || websocket.socket.readyState === 3) {
+      websocket.connect();
+      result = 'Socket connected!';
+    } else {
+      result = 'Socket was already connected';
+    }
+    console.log('-----------------------------------');
+    console.log(result);
+    console.log('-----------------------------------');
+    return Promise.resolve(websocket);
+  },
+  // Socket close
+  close: (exchange) => {
+    let result;
+    const websocket = exchange.websocket;
+    // If the socket is open, close it
+    if (websocket.socket && websocket.socket.readyState === 1) {
+      websocket.disconnect();
+      result = 'Socket disconnected!';
+    } else {
+      result = 'Socket was already disconnected';
+    }
+    console.log('-----------------------------------');
+    console.log(result);
+    console.log('-----------------------------------');
+    return Promise.resolve(websocket);
+  }
 }
